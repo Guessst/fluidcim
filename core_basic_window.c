@@ -1,60 +1,66 @@
-/*******************************************************************************************
-*
-*   raylib [core] example - Basic window
-*
-*   Welcome to raylib!
-*
-*   You can find all basic examples on C:\raylib\raylib\examples folder or
-*   raylib official webpage: www.raylib.com
-*
-*   Enjoy using raylib. :)
-*
-*   This example has been created using raylib 1.0 (www.raylib.com)
-*   It has been re-confirmed with raylib 3.7.0
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
-*
-*   Copyright (c) 2013-2016 Ramon Santamaria (@raysan5)
-*   Simple adjustments on 2021-10-01
-*
-********************************************************************************************/
-
 #include "raylib.h"
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    int screenWidth = 800;
-    int screenHeight = 450;
+    const int screenWidth = 800;
+    const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "raylib [textures] example - image drawing");
 
-    SetTargetFPS(60);
-    //--------------------------------------------------------------------------------------
+    Image screen = LoadImageFromScreen();
+    ImageDrawRectangle(&screen, 0, 0, screen.width, screen.height, RED);
 
+    // Texture2D texture = LoadTextureFromImage(parrots);      // Image converted to texture, uploaded to GPU memory (VRAM)
+    // UnloadImage(parrots);   // Once image has been converted to texture and uploaded to VRAM, it can be unloaded from RAM
+
+    SetTargetFPS(1000);
+    //---------------------------------------------------------------------------------------
+
+    float t = 0;
+    const float maxT = 100;
+    // const int pixelSquareSize = 10;
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        Texture2D screenTexture = LoadTextureFromImage(screen);
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
+        DrawFPS(0, 0);
 
-            ClearBackground(RAYWHITE);
+            // ClearBackground(RAYWHITE);
 
-            DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+            DrawTexture(screenTexture, 0, 0, WHITE);
+
+            // int currPos = (int)(10.0 * t);
+            // for(int i = currPos;i < currPos + pixelSquareSize;i++)
+            // {
+            //     for(int j = currPos;j < currPos + pixelSquareSize;j++)
+            //     {
+            //         ImageDrawPixel(&parrots, i, j, PINK);
+            //     }
+            // }
 
         EndDrawing();
+
+        t += GetFrameTime();
+        if(t >= maxT) t = 0;
+
         //----------------------------------------------------------------------------------
     }
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
+    CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
     return 0;
