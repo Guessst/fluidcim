@@ -90,6 +90,8 @@ COMPILATION_FLAGS="-std=c99 -Os -flto"
 FINAL_COMPILE_FLAGS="-s"
 WARNING_FLAGS="-Wall -Wextra -Wpedantic"
 LINK_FLAGS="-flto -lm -ldl -lpthread -lX11 -lxcb -lGL -lGLX -lXext -lGLdispatch -lXau -lXdmcp"
+#TODO(maybe): -fopenmp=libomp
+
 # Debug changes to flags
 if [ -n "$BUILD_DEBUG" ]; then
     OUTPUT_DIR="builds-debug/linux"
@@ -97,6 +99,8 @@ if [ -n "$BUILD_DEBUG" ]; then
     FINAL_COMPILE_FLAGS=""
     LINK_FLAGS="-lm -ldl -lpthread -lX11 -lxcb -lGL -lGLX -lXext -lGLdispatch -lXau -lXdmcp"
 fi
+##TODO(maybe): -fopenmp=libomp
+
 
 # Display what we're doing
 if [ -n "$BUILD_DEBUG" ]; then

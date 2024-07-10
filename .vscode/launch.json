@@ -27,7 +27,19 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Build with build-linux.sh"
+            "preLaunchTask": "Build debug with build-linux.sh"
+        },
+        {
+            "name": "Build Release and Run",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/builds/linux/game",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "Build release with build-linux.sh"
         }
 
     ]

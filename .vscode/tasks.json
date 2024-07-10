@@ -4,12 +4,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build with build-linux.sh",
+            "label": "Build debug with build-linux.sh",
             "type": "shell",
             "command": "./build-linux.sh",
             "args": [
                 "-d"
             ]
+        },
+        {
+            "label": "Build release with build-linux.sh",
+            "type": "shell",
+            "command": "./build-linux.sh"
         }
     ]
 }
