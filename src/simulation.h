@@ -6,10 +6,16 @@
 #define IX(i,j) ((i)+(N+2)*(j))
 #define SWAP(x0,x) {float* tmp = x0; x0 = x; x = tmp;}
 
-#define size (N+2)*(N+2)
+#define sizeOfBuffer (N+2)*(N+2)
 
-static int u[size], v[size], u_prev[size], v_prev[size];
-static int dens[size], dens_prev[size];
+static float u[sizeOfBuffer] = { 0 };
+static float v[sizeOfBuffer] = { 0 };
+static float u_prev[sizeOfBuffer] = { 0 };
+static float v_prev[sizeOfBuffer] = { 0 };
+
+
+static float dens[sizeOfBuffer] = { 0 };
+static float dens_prev[sizeOfBuffer] = { 0 };
 
 void set_bnd (int b, float* x );
 void add_source(float* x, float* s, float dt);

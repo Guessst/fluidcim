@@ -1,4 +1,4 @@
-#include "constants.h"
+#include "simulation.h"
 
 #include "raylib.h"
 
@@ -33,7 +33,7 @@ int main(void)
     // Texture2D texture = LoadTextureFromImage(parrots);      // Image converted to texture, uploaded to GPU memory (VRAM)
     // UnloadImage(parrots);   // Once image has been converted to texture and uploaded to VRAM, it can be unloaded from RAM
 
-    SetTargetFPS(1000);
+    SetTargetFPS(60);
     
     Camera2D camera = { 0 };
     // TODO: calcular offset
@@ -57,11 +57,10 @@ int main(void)
 
         // Zoom based on mouse wheel
         float wheel = GetMouseWheelMove();
+        // Get the world point that is under the mouse    
+        Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
         if (wheel != 0)
         {
-            // Get the world point that is under the mouse
-            Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
-            
             // Set the offset to where the mouse is
             camera.offset = GetMousePosition();
 
@@ -81,6 +80,29 @@ int main(void)
             camera.target = Vector2Zero();
             camera.offset = (Vector2){ screenWidth/6.0f, screenHeight/6.0f };
             camera.zoom = initialZoom;
+            for(int i = 0;i < N;i++)
+            {
+                for(int j = 0;j < N;j++)
+                {
+                    dens_prev[IX(i, j)] = 0;
+                }
+            }
+        }
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+        {
+            for(int i = 0;i < N;i++)
+            {
+                for(int j = 0;j < N;j++)
+                {
+                    float posX =  i*squareSize + i*squarePadding;
+                    float posY =  j*squareSize + j*squarePadding;
+                    if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= squareSize)
+                    {
+                        dens_prev[IX(i, j)] = 1;
+                        // printf("%f %f\n", posX, posY);
+                    }
+                }
+            }
         }
         
 
@@ -109,9 +131,13 @@ int main(void)
 
             */
 
+            vel_step(u, v, u_prev, v_prev, 0.1, GetFrameTime());
+            dens_step(dens, dens_prev, u, v, 10, GetFrameTime());
+
             BeginMode2D(camera);
                 // #pragma omp parallel for
                 for(int i = 0;i < N;i++)
+                {
                     for(int j = 0;j < N;j++)
                     {
                         float posX =  i*squareSize + i*squarePadding;
@@ -121,15 +147,18 @@ int main(void)
                         //     && pos.y <= posY && posY <= pos.y + squarePadding
                         // )
                         // {
+                            float densAtPos = dens[IX(i, j)];
+
                             DrawRectangle(
                                 posX,
                                 posY,
                                 squareSize,
                                 squareSize,
-                                RAYWHITE
+                                (Color){ 255, 255, 255, 255*(densAtPos / 0.05)}
                             );
                         // }
                     }
+                }
             EndMode2D();
         
         DrawFPS(0, 0);

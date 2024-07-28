@@ -21,7 +21,7 @@ void set_bnd (int b, float* x )
 void add_source(float* x, float* s, float dt)
 {
     for(int i=0;
-        i < size;
+        i < sizeOfBuffer;
         i++)
     {
         x[i] += dt*s[i];
