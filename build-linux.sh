@@ -5,7 +5,7 @@ GAME_NAME="game"
 # Set your sources here (relative paths!)
 # Example with two source folders:
 # SOURCES="src/*.c src/submodule/*.c"
-SOURCES="core_basic_window.c"
+SOURCES="*.c"
 
 # Set your raylib/src location here (relative path!)
 RAYLIB_SRC="raylib-5.0/src"

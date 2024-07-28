@@ -1,3 +1,5 @@
+#include "constants.h"
+
 #include "raylib.h"
 
 #include "rlgl.h"
@@ -17,14 +19,13 @@ int main(void)
     const int screenHeight = 800;
     const int min = screenHeight < screenWidth ? screenHeight : screenWidth;
 
-    const int N = 100;
     const int squareSize = (int)(1.0f * ((float)min / (float)N));
     const int squarePadding = (int)(0.3f * ((float)min / (float)N));
 
     const float initialZoom = 0.5f;
     // const int squarePadding = 100;
 
-    InitWindow(screenWidth, screenHeight, "raylib [textures] example - image drawing");
+    InitWindow(screenWidth, screenHeight, "fluidcim");
 
     // Image screen = LoadImageFromScreen();
     // ImageDrawRectangle(&screen, 0, 0, screen.width, screen.height, RED);
@@ -34,7 +35,7 @@ int main(void)
 
     SetTargetFPS(1000);
     
-    Camera2D camera = {};
+    Camera2D camera = { 0 };
     // TODO: calcular offset
     camera.offset = (Vector2){ screenWidth/6.0f, screenHeight/6.0f };
     camera.zoom = initialZoom;
@@ -81,6 +82,7 @@ int main(void)
             camera.offset = (Vector2){ screenWidth/6.0f, screenHeight/6.0f };
             camera.zoom = initialZoom;
         }
+        
 
         //----------------------------------------------------------------------------------
 
@@ -93,8 +95,6 @@ int main(void)
             // const char* myStr = (char*)malloc(sizeof(char)*15);
             // sprintf(myStr, "ThreadNum: %d", omp_get_max_threads());
             // DrawText(myStr, 0, 0, 10, RAYWHITE);
-
-            Vector2 pos = GetScreenToWorld2D(camera.target, camera);
 
             // printf("posx %f, posy: %f\n", pos.x, pos.y);
 
