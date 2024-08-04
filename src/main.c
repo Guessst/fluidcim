@@ -6,13 +6,26 @@
 #include "raymath.h"
 
 // #include <omp.h>
+#include <stdlib.h>
 #include <stdio.h>
+
+const float WATER_VISC = 0.89;
+const float WATER_DENS = 0.997;
+
+unsigned char squareColored[N*N] = {0};
+unsigned int currDebugs;
+
+void startDebug()
+{
+    currDebugs = 0;
+}
 
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void)
 {
+
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
@@ -96,10 +109,43 @@ int main(void)
                 {
                     float posX =  i*squareSize + i*squarePadding;
                     float posY =  j*squareSize + j*squarePadding;
-                    if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= squareSize)
+                    if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= squareSize*10)
                     {
-                        dens_prev[IX(i, j)] = 1;
+                        dens_prev[IX(i, j)] = WATER_DENS;
+                        if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) == squareSize*10){
+                        squareColored[i*N + j] = 1;
+                        }
                         // printf("%f %f\n", posX, posY);
+                    }
+                    else
+                    {
+                        squareColored[i*N + j] = 0;
+                    }
+                }
+            }
+        }
+        if(IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE))
+        {
+            for(int i = 0;i < N;i++)
+            {
+                for(int j = 0;j < N;j++)
+                {
+                    float posX =  i*squareSize + i*squarePadding;
+                    float posY =  j*squareSize + j*squarePadding;
+                    if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= squareSize*10)
+                    {
+
+                        // dens_prev[IX(i, j)] = 0;
+                        // dens[IX(i, j)] = 0;
+                        // v[IX(i, j)] = 0;
+                        // dens_prev[IX(i, j)] = 0;
+                        v_prev[IX(i, j)] = -v_prev[IX(i, j)];
+                        squareColored[i*N + j] = 1;
+                        // printf("%f %f\n", posX, posY);
+                    }
+                    else
+                    {
+                        squareColored[i*N + j] = 0;
                     }
                 }
             }
@@ -131,8 +177,8 @@ int main(void)
 
             */
 
-            vel_step(u, v, u_prev, v_prev, 0.1, GetFrameTime());
-            dens_step(dens, dens_prev, u, v, 10, GetFrameTime());
+            vel_step(u, v, u_prev, v_prev, WATER_VISC*20, GetFrameTime());//GetFrameTime());
+            dens_step(dens, dens_prev, u, v, WATER_DENS, GetFrameTime());//GetFrameTime());
 
             BeginMode2D(camera);
                 // #pragma omp parallel for
@@ -140,6 +186,7 @@ int main(void)
                 {
                     for(int j = 0;j < N;j++)
                     {
+
                         float posX =  i*squareSize + i*squarePadding;
                         float posY =  j*squareSize + j*squarePadding;
                         // if(
@@ -154,7 +201,12 @@ int main(void)
                                 posY,
                                 squareSize,
                                 squareSize,
-                                (Color){ 255, 255, 255, 255*(densAtPos / 0.05)}
+                                squareColored[i*N + j] ? RED : (
+                                    (densAtPos / WATER_DENS) <= 1.0 ?
+                                        ((Color){ 255, 255, 255, 255*(densAtPos / WATER_DENS) })
+                                        : BLUE
+                                )
+                                // (Color){ 255, 255, 255, 255*(densAtPos / 0.1)}
                             );
                         // }
                     }
@@ -162,6 +214,8 @@ int main(void)
             EndMode2D();
         
         DrawFPS(0, 0);
+        DrawText(TextFormat("%.3fms", (1.0f / GetFPS())), 0, 100, 20, RED);
+        
         EndDrawing();
         //----------------------------------------------------------------------------------
     }

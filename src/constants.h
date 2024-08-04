@@ -1,6 +1,6 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
-#define N 50
+#define N 100
 
 #endif
