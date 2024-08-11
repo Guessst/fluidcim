@@ -1,7 +1,7 @@
-#ifndef SIMULATION_H_
-#define SIMULATION_H_
+#ifndef FC_SIMULATION_H_
+#define FC_SIMULATION_H_
 
-#include "constants.h"
+#include "fc_constants.h"
 
 #define IX(i,j) ((i)+(N+2)*(j))
 #define SWAP(x0,x) {float* tmp = x0; x0 = x; x = tmp;}
@@ -25,15 +25,15 @@ typedef enum {
     SS_COUNT
 } SIMULATION_SUBSTANCE;
 
-static float u[sizeOfBuffer] = { 0 };
-static float v[sizeOfBuffer] = { 0 };
-static float u_prev[sizeOfBuffer] = { 0 };
-static float v_prev[sizeOfBuffer] = { 0 };
+extern float u[sizeOfBuffer];
+extern float v[sizeOfBuffer];
+extern float u_prev[sizeOfBuffer];
+extern float v_prev[sizeOfBuffer];
 
-static float dens[sizeOfBuffer] = { 0 };
-static float dens_prev[sizeOfBuffer] = { 0 };
+extern float dens[sizeOfBuffer];
+extern float dens_prev[sizeOfBuffer];
 
-static SIMULATION_SUBSTANCE CURR_SIMULATION_SUBSTANCE = SS_WATER;
+extern SIMULATION_SUBSTANCE CURR_SIMULATION_SUBSTANCE;
 
 void set_bnd (int b, float* x );
 void add_source(float* x, float* s, float dt);

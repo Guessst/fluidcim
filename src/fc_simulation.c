@@ -1,4 +1,14 @@
-#include "simulation.h"
+#include "fc_simulation.h"
+
+float u[sizeOfBuffer] = {0};
+float v[sizeOfBuffer] = {0};
+float u_prev[sizeOfBuffer] = {0};
+float v_prev[sizeOfBuffer] = {0};
+
+float dens[sizeOfBuffer] = {0};
+float dens_prev[sizeOfBuffer] = {0};
+
+SIMULATION_SUBSTANCE CURR_SIMULATION_SUBSTANCE = SS_WATER;
 
 void set_bnd (int b, float* x )
 {

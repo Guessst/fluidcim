@@ -1,5 +1,5 @@
-#ifndef CONSTANTS_H_
-#define CONSTANTS_H_
+#ifndef FC_CONSTANTS_H_
+#define FC_CONSTANTS_H_
 
 #define N 100
 #define SCREEN_WIDTH 800

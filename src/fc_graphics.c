@@ -1,7 +1,15 @@
-#include "graphics.h"
+#include "fc_graphics.h"
 #include <assert.h>
 
-unsigned char squareColored[N*N] = { 0 };
+Camera2D CAMERA = { 0 };
+unsigned char SQUARE_IS_COLORED[N*N] = { 0 };
+
+void resetCamera()
+{
+    CAMERA.target = Vector2Zero();
+    CAMERA.offset = (Vector2){ SCREEN_WIDTH/6.0f, SCREEN_HEIGHT/6.0f };
+    CAMERA.zoom = INITIAL_ZOOM;
+}
 
 void drawGridElement(int i, int j, Color color)
 {
@@ -20,7 +28,7 @@ void drawGridElement(int i, int j, Color color)
 void drawGridElementWithDens(int i, int j, float densAtPos)
 {
     Color color;
-    if(squareColored[i*N + j])
+    if(SQUARE_IS_COLORED[i*N + j])
     {
         color = RED;
     }

@@ -5,6 +5,10 @@
         "simulation.h": "c",
         "constants.h": "c",
         "rlgl.h": "c",
-        "graphics.h": "c"
+        "graphics.h": "c",
+        "fc_simulation.h": "c",
+        "fc_constants.h": "c",
+        "fc_input.h": "c",
+        "fc_graphics.h": "c"
     }
 }
