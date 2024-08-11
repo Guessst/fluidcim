@@ -3,6 +3,8 @@
         "raylib.h": "c",
         "raymath.h": "c",
         "simulation.h": "c",
-        "constants.h": "c"
+        "constants.h": "c",
+        "rlgl.h": "c",
+        "graphics.h": "c"
     }
 }

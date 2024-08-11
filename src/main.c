@@ -1,48 +1,16 @@
 #include "simulation.h"
+#include "graphics.h"
 
 #include "raylib.h"
-
 #include "rlgl.h"
 #include "raymath.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-
-#define WATER_VISC 0.89
-#define WATER_DENS 0.997
-
-#define HONEY_VISC 10000*WATER_VISC
-#define HONEY_DENS 1.4*WATER_DENS
-
-unsigned char flagWaterHoney = 0;
-
-const int minScreenDimension = MIN(SCREEN_WIDTH, SCREEN_HEIGHT);
-const int squareSize = (int)(1.0f * ((float)minScreenDimension / (float)N));
-const int squarePadding = (int)(0.3f * ((float)minScreenDimension / (float)N));
-unsigned char squareColored[N*N] = {0};
-
-void drawGridElement(int i, int j, Color color)
-{
-
-    float posX =  i*squareSize + i*squarePadding;
-    float posY =  j*squareSize + j*squarePadding;
-
-    DrawRectangle(
-        posX,
-        posY,
-        squareSize,
-        squareSize,
-        color
-        // (Color){ 255, 255, 255, 255*(densAtPos / 0.1)}
-    );
-}
+#include <assert.h>
 
 int main(void)
 {
-
-    // Initialization
-    //--------------------------------------------------------------------------------------
-
     const float initialZoom = 0.5f;
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "fluidcim");
@@ -102,6 +70,10 @@ int main(void)
                 dens[i] = 0;
                 dens_prev[i] = 0;
             }
+            for(int i = 0;i < N*N;i++)
+            {
+                squareColored[i] = 0;
+            }
         }
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
@@ -109,59 +81,42 @@ int main(void)
             {
                 for(int j = 0;j < N;j++)
                 {
-                    float posX =  i*squareSize + i*squarePadding;
-                    float posY =  j*squareSize + j*squarePadding;
-                    if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= squareSize*10)
+                    float posX =  i*SQUARE_SIZE + i*SQUARE_PADDING;
+                    float posY =  j*SQUARE_SIZE + j*SQUARE_PADDING;
+                    if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= SQUARE_SIZE)
                     {
-                        dens_prev[IX(i, j)] = (flagWaterHoney ? WATER_DENS : HONEY_DENS);
+                        switch(CURR_SIMULATION_SUBSTANCE)
+                        {
+                            case SS_WATER:
+                                dens_prev[IX(i, j)] = WATER_DENS;
+                            break;
+                            case SS_HONEY:
+                                dens_prev[IX(i, j)] = HONEY_DENS;
+                            break;
+                            default:
+                                dens_prev[IX(i, j)] = 0;
+                                assert(0 && "unreachable");
+                            break;
+                        }
                         // if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) == squareSize*10){
                         // squareColored[i*N + j] = 1;
                         // }
                         // printf("%f %f\n", posX, posY);
                     }
-                    else
-                    {
-                        squareColored[i*N + j] = 0;
+                    if(IsKeyDown(KEY_D)){
+                        ;
                     }
-                }
-            }
-        }
-        if(IsMouseButtonDown(MOUSE_BUTTON_MIDDLE))
-        {
-            for(int i = 0;i < N;i++)
-            {
-                for(int j = 0;j < N;j++)
-                {
-                    float posX =  i*squareSize + i*squarePadding;
-                    float posY =  j*squareSize + j*squarePadding;
-                    if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= squareSize*10)
+                    if((int)(mouseWorldPos.x / (SQUARE_SIZE + SQUARE_PADDING)) == i
+                    && (int)(mouseWorldPos.y / (SQUARE_SIZE + SQUARE_PADDING)) == j)
                     {
-
-                        // dens_prev[IX(i, j)] = 0;
-                        // dens[IX(i, j)] = 0;
-                        // v[IX(i, j)] = 0;
-                        // dens_prev[IX(i, j)] = 0;
-                        if(dens_prev[IX(i, j)] > 0) dens_prev[IX(i, j)] = 0;
-                        // u_prev[IX(i, j)] = WATER_VISC;
-                        
-                        
-                        // TODO: modificar u_prev 
-
-
-
-                        // squareColored[i*N + j] = 1;
-                        // printf("%f %f\n", posX, posY);
-                    }
-                    else
-                    {
-                        squareColored[i*N + j] = 0;
+                        squareColored[i*N + j] = 1;
                     }
                 }
             }
         }
         if(IsKeyPressed(KEY_H))
         {
-            flagWaterHoney = !flagWaterHoney;
+            CURR_SIMULATION_SUBSTANCE = (CURR_SIMULATION_SUBSTANCE + 1) % SS_COUNT;
         }
         
 
@@ -184,13 +139,14 @@ int main(void)
 
             // TODO: pausar simulação para debuggar sem usar breakpoint
             // TODO: fazer struct pra debugar os quadrado
+            // TODO: fazer vetores de velocidade
 
-            if(flagWaterHoney)
+            if(CURR_SIMULATION_SUBSTANCE == SS_WATER)
             {
                 vel_step(u, v, u_prev, v_prev, WATER_VISC, GetFrameTime());
                 dens_step(dens, dens_prev, u, v, WATER_DENS, GetFrameTime());
             }
-            else
+            else if(CURR_SIMULATION_SUBSTANCE == SS_HONEY)
             {
                 vel_step(u, v, u_prev, v_prev, HONEY_VISC, GetFrameTime());
                 dens_step(dens, dens_prev, u, v, HONEY_DENS, GetFrameTime());
@@ -200,58 +156,20 @@ int main(void)
                 for(int i = 0;i < N;i++)
                 {
                     for(int j = 0;j < N;j++)
-                    {
-                            // if((i + j)%2 == 0) u_prev[IX(i, j)] = 10;
-
-                            float densAtPos = dens[IX(i, j)];
-                            float uPrev = u_prev[IX(i, j)];
-                            // float vAtPos = v[IX(i, j)];
-                            if(flagWaterHoney)
-                            {
-                                drawGridElement(
-                                    i,
-                                    j,
-                                    squareColored[i*N + j] ?
-                                        RED 
-                                        : (
-                                            (densAtPos / WATER_DENS) <= 1.0 ?
-                                                ((Color){ 255, 255, 255, 255*(densAtPos / WATER_DENS) })
-                                                : BLUE
-                                        )
-                                );
-                            }
-                            else
-                            {
-                                drawGridElement(
-                                    i,
-                                    j,
-                                    squareColored[i*N + j] ?
-                                        RED 
-                                        : (
-                                            (densAtPos / HONEY_DENS) <= 1.0 ?
-                                                ((Color){ 255, 255, 255, 255*(densAtPos / HONEY_DENS) })
-                                                : BLUE
-                                        )
-                                );
-                            }
-                            const Color transparentOrange = (Color){ 255, 161, 0, 255/2 };
-                            // if(uPrev >= WATER_VISC) drawGridElement(i, j, ORANGE);
+                    {       
+                        float densAtPos = dens[IX(i, j)];
+                        drawGridElementWithDens(i, j, densAtPos);
                     }
                 }
             EndMode2D();
         
         DrawFPS(0, 0);
         DrawText(TextFormat("%fms", GetFrameTime()*1000.0f), 0, 100, 20, RED);
-        if(flagWaterHoney) {DrawText("WATER", 0, 200, 20, BLUE);}
+        if(CURR_SIMULATION_SUBSTANCE == SS_WATER) {DrawText("WATER", 0, 200, 20, BLUE);}
         else {DrawText("honey", 0, 200, 20, YELLOW);}
         
         EndDrawing();
-        //----------------------------------------------------------------------------------
     }
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
+    CloseWindow();
     return 0;
 }
