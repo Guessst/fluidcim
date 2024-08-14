@@ -34,6 +34,7 @@ extern float dens[sizeOfBuffer];
 extern float dens_prev[sizeOfBuffer];
 
 extern SIMULATION_SUBSTANCE CURR_SIMULATION_SUBSTANCE;
+extern unsigned char SHOULD_SIMULATE;
 
 void set_bnd (int b, float* x );
 void add_source(float* x, float* s, float dt);

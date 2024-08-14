@@ -9,6 +9,7 @@ float dens[sizeOfBuffer] = {0};
 float dens_prev[sizeOfBuffer] = {0};
 
 SIMULATION_SUBSTANCE CURR_SIMULATION_SUBSTANCE = SS_WATER;
+unsigned char SHOULD_SIMULATE = 0;
 
 void set_bnd (int b, float* x )
 {

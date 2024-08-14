@@ -3,6 +3,7 @@
 
 Camera2D CAMERA = { 0 };
 unsigned char SQUARE_IS_COLORED[N*N] = { 0 };
+unsigned short NUMBER_OF_UI_ELEMENTS = 0;
 
 void resetCamera()
 {
@@ -65,4 +66,42 @@ void drawGridElementWithDens(int i, int j, float densAtPos)
     }
 
     drawGridElement(i, j, color);
+}
+
+void beginUI(void)
+{
+    NUMBER_OF_UI_ELEMENTS = 0;
+}
+
+void addToUI(void* var, const char* label, VAR_TYPE type)
+{
+    switch(type)
+    {
+        case VT_FLOAT:
+        {
+            const char* formatedFloat = TextFormat("%s: %f", label, *((float*)var));
+            const int posY = 100 + 20*NUMBER_OF_UI_ELEMENTS;
+            DrawText(formatedFloat, 0, posY, 20, BLUE);
+            break;
+        }
+        case VT_INT:
+        {
+            const char* formatedInt = TextFormat("%s: %d", label, *((int*)var));
+            const int posY = 100 + 20*NUMBER_OF_UI_ELEMENTS;
+            DrawText(formatedInt, 0, posY, 20, BLUE);
+            break;
+        }
+        default:
+        {
+            assert(0 && "unreachable");
+            break;
+        }
+    }
+
+    NUMBER_OF_UI_ELEMENTS += 1;
+}
+
+void endUI(void)
+{
+    // TODO: Draw UI elements
 }
