@@ -10,6 +10,7 @@
 void init(void)
 {
     resetCamera();
+    beginUI();
 }
 
 int main(void)
@@ -64,11 +65,7 @@ int main(void)
 
             */
 
-            // TODO: pausar simulação para debuggar sem usar breakpoint
-            // TODO: fazer struct pra debugar os quadrado
             // TODO: fazer vetores de velocidade
-
-            float densAtDebugPos;
 
             BeginMode2D(CAMERA);
                 for(int i = 0;i < N;i++)
@@ -76,7 +73,6 @@ int main(void)
                     for(int j = 0;j < N;j++)
                     {       
                         float densAtPos = dens[IX(i, j)];
-                        if(i == N/2 && j == N/2) densAtDebugPos = densAtPos;
                         // printf("densAtPos: %f\n", densAtPos);
                         drawGridElementWithDens(i, j, densAtPos);
                     }
@@ -85,14 +81,15 @@ int main(void)
         
             DrawFPS(0, 0);
             DrawText(TextFormat("%fms", GetFrameTime()*1000.0f), 0, 20, 20, RED);
+            DrawText(SHOULD_SIMULATE ? "SIMULATING" : "NOT SIMULATING", SCREEN_WIDTH / 2, 0, 20, SHOULD_SIMULATE ? GREEN : PURPLE);
+
             if(CURR_SIMULATION_SUBSTANCE == SS_WATER) {DrawText("WATER", 0, 200, 20, BLUE);}
             else {DrawText("honey", 0, 200, 20, YELLOW);}
 
-            beginUI();
-            addToUI((void*)&densAtDebugPos, "densAtDebugPos", VT_FLOAT);
-            int ssInInt = (int)SHOULD_SIMULATE;
-            addToUI((void*)&ssInInt, "shouldSimulate", VT_INT);
             // addToUI((void*)&densAtDebugPos, "densAtDebugPos", VT_FLOAT);
+            // int ssInInt = (int)SHOULD_SIMULATE;
+            // addToUI((void*)&ssInInt, "shouldSimulate", VT_INT);
+            // // addToUI((void*)&densAtDebugPos, "densAtDebugPos", VT_FLOAT);
             endUI();
         
         EndDrawing();

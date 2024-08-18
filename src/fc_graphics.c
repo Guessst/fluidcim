@@ -1,9 +1,11 @@
 #include "fc_graphics.h"
+#include <stdlib.h>
 #include <assert.h>
 
 Camera2D CAMERA = { 0 };
-unsigned char SQUARE_IS_COLORED[N*N] = { 0 };
+ColoredSquare COLORED_SQUARES[N*N] = { 0 };
 unsigned short NUMBER_OF_UI_ELEMENTS = 0;
+UIElement* UI_ELEMENTS[MAX_NUMBER_OF_UI_ELEMENTS]; // maybe initialize with 0's would be a good idea? idk
 
 void resetCamera()
 {
@@ -29,9 +31,38 @@ void drawGridElement(int i, int j, Color color)
 void drawGridElementWithDens(int i, int j, float densAtPos)
 {
     Color color;
-    if(SQUARE_IS_COLORED[i*N + j])
+    ColoredSquare* curr = &COLORED_SQUARES[i*N + j];
+    if(curr->isColored)
     {
-        color = RED;
+        Color c;
+        switch(curr->type)
+        {   
+            case CS_TRAILING:
+            {
+                c = RED;
+                
+                // TODO: colocar isso em outro lugar
+                curr->opacity -= 1;
+                if(curr->opacity <= 0) curr->isColored = 0;
+                break;
+            }
+            case CS_DEBUG_1:
+            {
+                c = PURPLE;
+                break;
+            }
+            case CS_DEBUG_2:
+            {
+                c = PINK;
+                break;
+            }
+            default:
+            {
+                assert(0 && "not implemented");
+                break;
+            }
+        }
+        color = (Color){c.r, c.g, c.b, curr->opacity};
     }
     else
     {
@@ -52,7 +83,7 @@ void drawGridElementWithDens(int i, int j, float densAtPos)
                 break;
         }
 
-        if((densAtPos / (currSimulationSubstanceDens * DENS_TOLERANCE_RATIO) <= 1.0))
+        if((densAtPos / currSimulationSubstanceDens <= 1.0))
         {
             color = (Color){
                 255, 255, 255,
@@ -71,37 +102,75 @@ void drawGridElementWithDens(int i, int j, float densAtPos)
 void beginUI(void)
 {
     NUMBER_OF_UI_ELEMENTS = 0;
+    for(int i = 0;i < MAX_NUMBER_OF_UI_ELEMENTS;i++)
+    {
+        UI_ELEMENTS[i] = malloc(sizeof(UIElement));
+    }
 }
 
-void addToUI(void* var, const char* label, VAR_TYPE type)
+void addToUI(const void* var, const char* label, const VAR_TYPE type, const unsigned char isGridElement, const int i, const int j)
 {
-    switch(type)
-    {
-        case VT_FLOAT:
-        {
-            const char* formatedFloat = TextFormat("%s: %f", label, *((float*)var));
-            const int posY = 100 + 20*NUMBER_OF_UI_ELEMENTS;
-            DrawText(formatedFloat, 0, posY, 20, BLUE);
-            break;
-        }
-        case VT_INT:
-        {
-            const char* formatedInt = TextFormat("%s: %d", label, *((int*)var));
-            const int posY = 100 + 20*NUMBER_OF_UI_ELEMENTS;
-            DrawText(formatedInt, 0, posY, 20, BLUE);
-            break;
-        }
-        default:
-        {
-            assert(0 && "unreachable");
-            break;
-        }
-    }
+    const int posY = 100 + 20*NUMBER_OF_UI_ELEMENTS;
 
+    UIElement* e = UI_ELEMENTS[NUMBER_OF_UI_ELEMENTS];
+    e->varType = type;
+    e->position = (Vector2){0, posY};
+    e->value = var;
+    e->label = label;
+    if(isGridElement)
+    {
+        e->isGridElement = isGridElement;
+        e->i = i;
+        e->j = j;
+    }
+            
     NUMBER_OF_UI_ELEMENTS += 1;
+    if(NUMBER_OF_UI_ELEMENTS == MAX_NUMBER_OF_UI_ELEMENTS) assert(0 && "exceeded max number of UI elements");
 }
 
 void endUI(void)
 {
-    // TODO: Draw UI elements
+    for(int i = 0;i < NUMBER_OF_UI_ELEMENTS;i++)
+    {
+        UIElement* e = UI_ELEMENTS[i];
+        
+        const char* formated;
+        switch(e->varType)
+        {
+            case VT_FLOAT:
+            {
+                if(e->isGridElement)
+                {
+                    formated = TextFormat("%s(%d, %d): %f", e->label, e->i, e->j, *((float*)e->value));
+
+                }
+                else
+                {
+                    formated = TextFormat("%s: %f", e->label, *((float*)e->value));
+                }
+                break;
+            }
+            default:
+            {
+                assert(0 && "not implemented");
+                break;
+            }
+        }
+        DrawText(formated, e->position.x, e->position.y, 20, BLUE);
+    }
+}
+
+void debugGridElement(int i, int j)
+{
+    const float* densAtPos = &dens[IX(i, j)];
+    const char* label = "";
+
+    addToUI((const void*)densAtPos, label, VT_FLOAT, 1, i, j);
+}
+
+void colorSquare(const int i, const int j, COLORED_SQUARE_TYPE type)
+{
+    COLORED_SQUARES[i*N + j].type = type;
+    COLORED_SQUARES[i*N + j].isColored = 1;
+    COLORED_SQUARES[i*N + j].opacity = 255;
 }

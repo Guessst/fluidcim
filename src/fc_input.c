@@ -4,6 +4,9 @@
 
 void collectInput(void)
 {
+    // For the whole scope
+    Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), CAMERA);
+        
     // Translate based on mouse right click
     if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
     {
@@ -14,8 +17,6 @@ void collectInput(void)
     }
 
     float wheel = GetMouseWheelMove();
-    
-    Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), CAMERA);
     if (wheel != 0)
     {
         // Set the offset to where the mouse is
@@ -56,7 +57,7 @@ void collectInput(void)
             }
             for(int i = 0;i < N*N;i++)
             {
-                SQUARE_IS_COLORED[i] = 0;
+                COLORED_SQUARES[i].isColored = 0;
             }
         }
         if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
@@ -93,11 +94,22 @@ void collectInput(void)
                     if((int)(mouseWorldPos.x / (SQUARE_SIZE + SQUARE_PADDING)) == i
                     && (int)(mouseWorldPos.y / (SQUARE_SIZE + SQUARE_PADDING)) == j)
                     {
-                        SQUARE_IS_COLORED[i*N + j] = 1;
+                        colorSquare(i, j, CS_TRAILING);
                     }
                 }
             }
         }
     }
-    
+    else // !SHOULD_SIMULATE
+    {
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            const int i = SQUARE_INDEX_I(mouseWorldPos.x);
+            const int j = SQUARE_INDEX_J(mouseWorldPos.y);
+            colorSquare(i, j, CS_DEBUG_1);
+            debugGridElement(i, j);
+
+            // addToUI((void*)densAtPos, "teste", VT_FLOAT);
+        }
+    }
 }
