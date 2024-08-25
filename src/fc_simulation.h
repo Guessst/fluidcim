@@ -8,11 +8,11 @@
 
 #define sizeOfBuffer (N+2)*(N+2)
 
-#define WATER_VISC 0.89
-#define WATER_DENS 0.997
+#define WATER_VISC 0.89f
+#define WATER_DENS 0.997f
 
-#define HONEY_VISC 10000*WATER_VISC
-#define HONEY_DENS 1.4*WATER_DENS
+#define HONEY_VISC 10000.0f*WATER_VISC
+#define HONEY_DENS 1.4f*WATER_DENS
 
 typedef enum {
     SS_WATER = 0,

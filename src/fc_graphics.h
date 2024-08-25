@@ -35,7 +35,8 @@ typedef struct ColoredSquare {
 
 typedef struct UIElement {
     VAR_TYPE varType;
-    Vector2 position;
+    int positionX;
+    int positionY;
     const void* value;
     const char* label;
     // for grid elements

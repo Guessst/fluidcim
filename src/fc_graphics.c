@@ -16,8 +16,8 @@ void resetCamera()
 
 void drawGridElement(int i, int j, Color color)
 {
-    float posX =  j*SQUARE_SIZE + j*SQUARE_PADDING;
-    float posY =  i*SQUARE_SIZE + i*SQUARE_PADDING;
+    int posX =  j*SQUARE_SIZE + j*SQUARE_PADDING;
+    int posY =  i*SQUARE_SIZE + i*SQUARE_PADDING;
 
     DrawRectangle(
         posX,
@@ -83,7 +83,7 @@ void drawGridElementWithDens(int i, int j, float densAtPos)
         {
             color = (Color){
                 255, 255, 255,
-                255*(densAtPos / currSimulationSubstanceDens)
+                (int)(255.0f*(densAtPos / currSimulationSubstanceDens))
             };
         }
         else
@@ -116,21 +116,21 @@ void drawGridArrow(const int i, const int j)
     
     if(horizontalVelocity != 0 && verticalVelocity == 0)
     {    
-        float posX =  SQUARE_POS_X_CENTER(i) - (r/2.0f);
-        float posY =  SQUARE_POS_Y_CENTER(j) - (r/2.0f);
+        int posX = (int)(SQUARE_POS_X_CENTER(i) - (r/2.0f));
+        int posY = (int)(SQUARE_POS_Y_CENTER(j) - (r/2.0f));
         DrawCircle(posX, posY, r, RED);
         return;
     }
     
     float amplify = 1.0f;
     
-    float xStart = SQUARE_POS_X_CENTER(i);
+    int xStart = (int)(SQUARE_POS_X_CENTER(i));
     // float xStart = i*SQUARE_SIZE + (SQUARE_SIZE/2) + i*SQUARE_PADDING;
-    float xEnd = xStart + (horizontalVelocity*amplify);
+    int xEnd = xStart + (int)(horizontalVelocity*amplify);
 
-    float yStart = SQUARE_POS_Y_CENTER(j);
+    int yStart = (int)(SQUARE_POS_Y_CENTER(j));
     // float yStart = j*SQUARE_SIZE + (SQUARE_SIZE/2) + j*SQUARE_PADDING;
-    float yEnd = yStart + (verticalVelocity*amplify);
+    int yEnd = yStart + (int)(verticalVelocity*amplify);
     
     DrawLine(xStart, yStart, xEnd, yEnd, RED);
     // DrawLineEx((Vector2){xStart, yStart}, (Vector2){xEnd, yEnd}, 2.0f, RED);
@@ -151,7 +151,8 @@ void addToUI(const void* var, const char* label, const VAR_TYPE type, const unsi
 
     UIElement* e = UI_ELEMENTS[NUMBER_OF_UI_ELEMENTS];
     e->varType = type;
-    e->position = (Vector2){0, posY};
+    e->positionX = 0;
+    e->positionY = posY;
     e->value = var;
     e->label = label;
     if(isGridElement)
@@ -171,7 +172,7 @@ void endUI(void)
     {
         UIElement* e = UI_ELEMENTS[i];
         
-        const char* formated;
+        const char* formated = "";
         switch(e->varType)
         {
             case VT_FLOAT:
@@ -193,7 +194,7 @@ void endUI(void)
                 break;
             }
         }
-        DrawText(formated, e->position.x, e->position.y, 20, BLUE);
+        DrawText(formated, e->positionX, e->positionY, 20, BLUE);
     }
 }
 
