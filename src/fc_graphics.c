@@ -40,10 +40,6 @@ void drawGridElementWithDens(int i, int j, float densAtPos)
             case CS_TRAILING:
             {
                 c = RED;
-                
-                // TODO: colocar isso em outro lugar
-                curr->opacity -= 1;
-                if(curr->opacity <= 0) curr->isColored = 0;
                 break;
             }
             case CS_DEBUG_1:
@@ -97,6 +93,47 @@ void drawGridElementWithDens(int i, int j, float densAtPos)
     }
 
     drawGridElement(i, j, color);
+}
+
+void decayGridElementTrailing(int i, int j)
+{
+    ColoredSquare* curr = &COLORED_SQUARES[i*N + j];
+    if(SHOULD_SIMULATE && curr->isColored && curr->type == CS_TRAILING)
+    {
+        curr->opacity -= 1;
+        int threshold = 2*255/3;
+        if(curr->opacity <= threshold) curr->isColored = 0;
+    }
+    
+}
+
+void drawGridArrow(const int i, const int j)
+{
+    float horizontalVelocity = u_prev[IX(i, j)];
+    float verticalVelocity = v_prev[IX(i, j)];
+    
+    float r = 1.0f;
+    
+    if(horizontalVelocity == 0 && verticalVelocity == 0)
+    {    
+        float posX =  SQUARE_POS_X_CENTER(j) - (r/2.0f);
+        float posY =  SQUARE_POS_Y_CENTER(i) - (r/2.0f);
+        // DrawCircle(posX, posY, r, RED);
+        return;
+    }
+    
+    float amplify = 10.0f;
+    
+    float xStart = SQUARE_POS_X_CENTER(j);
+    // float xStart = i*SQUARE_SIZE + (SQUARE_SIZE/2) + i*SQUARE_PADDING;
+    float xEnd = xStart + (horizontalVelocity*amplify);
+
+    float yStart = SQUARE_POS_Y_CENTER(i);
+    // float yStart = j*SQUARE_SIZE + (SQUARE_SIZE/2) + j*SQUARE_PADDING;
+    float yEnd = yStart + (verticalVelocity*amplify);
+    
+    DrawLine(xStart, yStart, xEnd, yEnd, RED);
+    // DrawLineEx((Vector2){xStart, yStart}, (Vector2){xEnd, yEnd}, 2.0f, RED);
 }
 
 void beginUI(void)
@@ -173,4 +210,17 @@ void colorSquare(const int i, const int j, COLORED_SQUARE_TYPE type)
     COLORED_SQUARES[i*N + j].type = type;
     COLORED_SQUARES[i*N + j].isColored = 1;
     COLORED_SQUARES[i*N + j].opacity = 255;
+}
+
+void resetColoredSquares(void)
+{
+    for(int i = 0;i < N*N;i++)
+    {
+        COLORED_SQUARES[i].isColored = 0;
+    }
+}
+
+void resetUI(void)
+{
+    NUMBER_OF_UI_ELEMENTS = 0;
 }

@@ -24,9 +24,15 @@ extern float u[sizeOfBuffer];
 extern float v[sizeOfBuffer];
 extern float u_prev[sizeOfBuffer];
 extern float v_prev[sizeOfBuffer];
+extern unsigned char should_receive_uv_from_ui[sizeOfBuffer];
+extern float u_prev_from_ui[sizeOfBuffer];
+extern float v_prev_from_ui[sizeOfBuffer];
 
 extern float dens[sizeOfBuffer];
 extern float dens_prev[sizeOfBuffer];
+
+extern float CURR_DENS;
+extern float CURR_VISC;
 
 extern SIMULATION_SUBSTANCE CURR_SIMULATION_SUBSTANCE;
 extern unsigned char SHOULD_SIMULATE;
@@ -35,7 +41,10 @@ void set_bnd (int b, float* x );
 void add_source(float* x, float* s, float dt);
 void diffuse(int b, float* x, float* x0, float diff, float dt);
 void advect(int b, float* d, float* d0, float* u, float* v, float dt);
-void dens_step(float* x, float* x0, float* u, float* v, float diff, float dt);
-void vel_step(float* u, float* v, float* u0, float* v0, float visc, float dt);
+void dens_step_any(float* x, float* x0, float* u, float* v, float diff, float dt);
+void dens_step(float* x, float* x0, float* u, float* v, float dt);
+void vel_step_any(float* u, float* v, float* u0, float* v0, float visc, float dt);
+void vel_step(float* u, float* v, float* u0, float* v0, float dt);
 void project(float* u, float* v, float* p, float* div);
+void resetSimulationVars(void);
 #endif

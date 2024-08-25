@@ -17,7 +17,7 @@ int main(void)
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "fluidcim");
 
-    SetTargetFPS(60);
+    SetTargetFPS(0);
     // TODO: properly compute offset
     init();
     while (!WindowShouldClose())
@@ -26,26 +26,13 @@ int main(void)
 
         if(SHOULD_SIMULATE)
         {
-            float currVisc, currDens;
-            switch(CURR_SIMULATION_SUBSTANCE)
+            for(int i = 0;i < sizeOfBuffer;i++)
             {
-                case SS_WATER:
-                    currVisc = WATER_VISC;
-                    currDens = WATER_DENS;
-                break;
-                case SS_HONEY:
-                    currVisc = HONEY_VISC;
-                    currDens = HONEY_DENS;
-                break;
-                default:
-                    currVisc = 0;
-                    currDens = 0;
-                    assert(0 && "unreachable");
-                break;
+                u_prev[i] = u_prev_from_ui[i];
             }
-
-            vel_step(u, v, u_prev, v_prev, currVisc, GetFrameTime());
-            dens_step(dens, dens_prev, u, v, currDens, GetFrameTime());
+            
+            vel_step(u, v, u_prev, v_prev, GetFrameTime());
+            dens_step(dens, dens_prev, u, v, GetFrameTime());
         }
         else
         {
@@ -75,6 +62,14 @@ int main(void)
                         float densAtPos = dens[IX(i, j)];
                         // printf("densAtPos: %f\n", densAtPos);
                         drawGridElementWithDens(i, j, densAtPos);
+                        if(SHOULD_SIMULATE) decayGridElementTrailing(i, j);
+                    }
+                }
+                for(int i = 0;i < N;i++)
+                {
+                    for(int j = 0;j < N;j++)
+                    {       
+                        drawGridArrow(i, j);
                     }
                 }
             EndMode2D();

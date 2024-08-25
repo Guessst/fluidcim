@@ -33,6 +33,20 @@ void collectInput(void)
     if(IsKeyPressed(KEY_H))
     {
         CURR_SIMULATION_SUBSTANCE = (CURR_SIMULATION_SUBSTANCE + 1) % SS_COUNT;
+        switch(CURR_SIMULATION_SUBSTANCE)
+        {
+            case SS_WATER:
+                CURR_DENS = WATER_DENS;
+                CURR_VISC = WATER_VISC;
+            break;
+            case SS_HONEY:
+                CURR_DENS = HONEY_DENS;
+                CURR_VISC = HONEY_VISC;
+            break;
+            default:
+                assert(0 && "unreachable");
+            break;
+        }
     }
     if(IsKeyPressed(KEY_D))
     {
@@ -45,29 +59,32 @@ void collectInput(void)
         if(IsKeyPressed(KEY_SPACE))
         {
             resetCamera();
-            
-            for(int i = 0;i < sizeOfBuffer;i++)
-            {
-                u[i] = 0;
-                v[i] = 0;
-                u_prev[i] = 0;
-                v_prev[i] = 0;
-                dens[i] = 0;
-                dens_prev[i] = 0;
-            }
+            resetSimulationVars();
             for(int i = 0;i < N*N;i++)
             {
-                COLORED_SQUARES[i].isColored = 0;
+                if(COLORED_SQUARES[i].type != CS_DEBUG_1 && COLORED_SQUARES[i].type != CS_DEBUG_2)
+                {
+                    COLORED_SQUARES[i].isColored = 0;
+                }
             }
         }
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+        if(IsKeyDown(KEY_LEFT_SHIFT))
+        {
+            if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+            {
+                int i = SQUARE_INDEX_I(mouseWorldPos.x);
+                int j = SQUARE_INDEX_J(mouseWorldPos.y);
+                u_prev_from_ui[IX(i, j)] = 10.0f;
+            }
+        }
+        else if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
             for(int i = 0;i < N;i++)
             {
                 for(int j = 0;j < N;j++)
                 {
-                    float posX =  i*SQUARE_SIZE + i*SQUARE_PADDING;
-                    float posY =  j*SQUARE_SIZE + j*SQUARE_PADDING;
+                    float posX =  SQUARE_POS_X_CENTER(i);
+                    float posY =  SQUARE_POS_Y_CENTER(j);
                     if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= SQUARE_SIZE*10)
                     {
                         switch(CURR_SIMULATION_SUBSTANCE)
@@ -110,6 +127,11 @@ void collectInput(void)
             debugGridElement(i, j);
 
             // addToUI((void*)densAtPos, "teste", VT_FLOAT);
+        }
+        if(IsKeyPressed(KEY_SPACE))
+        {
+            resetUI();
+            resetColoredSquares();
         }
     }
 }

@@ -9,6 +9,7 @@
         "fc_simulation.h": "c",
         "fc_constants.h": "c",
         "fc_input.h": "c",
-        "fc_graphics.h": "c"
+        "fc_graphics.h": "c",
+        "assert.h": "c"
     }
 }

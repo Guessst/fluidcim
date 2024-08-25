@@ -9,7 +9,8 @@
 typedef enum {
     VT_INT,
     VT_UINT,
-    VT_FLOAT
+    VT_FLOAT,
+    VT_STRING,
 } VAR_TYPE;
 
 #endif

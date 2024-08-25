@@ -4,9 +4,15 @@ float u[sizeOfBuffer] = {0};
 float v[sizeOfBuffer] = {0};
 float u_prev[sizeOfBuffer] = {0};
 float v_prev[sizeOfBuffer] = {0};
+unsigned char should_receive_uv_from_ui[sizeOfBuffer] = {0};
+float u_prev_from_ui[sizeOfBuffer] = {0};
+float v_prev_from_ui[sizeOfBuffer] = {0};
 
 float dens[sizeOfBuffer] = {0};
 float dens_prev[sizeOfBuffer] = {0};
+
+float CURR_DENS = WATER_DENS;
+float CURR_VISC = WATER_VISC;
 
 SIMULATION_SUBSTANCE CURR_SIMULATION_SUBSTANCE = SS_WATER;
 unsigned char SHOULD_SIMULATE = 0;
@@ -113,7 +119,7 @@ void advect(int b, float* d, float* d0, float* u, float* v, float dt )
     set_bnd ( b, d );
 }
 
-void dens_step(float* x, float* x0, float* u, float* v, float diff, float dt)
+void dens_step_any(float* x, float* x0, float* u, float* v, float diff, float dt)
 {
     add_source(x, x0, dt);
     
@@ -124,7 +130,12 @@ void dens_step(float* x, float* x0, float* u, float* v, float diff, float dt)
     advect(0, x, x0, u, v, dt);
 }
 
-void vel_step(float* u, float* v, float* u0, float* v0, float visc, float dt)
+void dens_step(float* x, float* x0, float* u, float* v, float dt)
+{
+    dens_step_any(x, x0, u, v, CURR_DENS, dt);
+}
+
+void vel_step_any(float* u, float* v, float* u0, float* v0, float visc, float dt)
 {
     add_source (u, u0, dt );
     add_source (v, v0, dt );
@@ -140,6 +151,11 @@ void vel_step(float* u, float* v, float* u0, float* v0, float visc, float dt)
     advect (2, v, v0, u0, v0, dt );
     
     project (u, v, u0, v0 );
+}
+
+void vel_step(float* u, float* v, float* u0, float* v0, float dt)
+{
+    vel_step_any(u, v, u0, v0, CURR_VISC, dt);
 }
 
 void project(float* u, float* v, float* p, float* div)
@@ -206,4 +222,19 @@ void project(float* u, float* v, float* p, float* div)
     set_bnd ( 2, v );
 }
 
+void resetSimulationVars(void)
+{
+    for(int i = 0;i < sizeOfBuffer;i++)
+    {
+        u[i] = 0;
+        v[i] = 0;
+        u_prev[i] = 0;
+        v_prev[i] = 0;
+        should_receive_uv_from_ui[i] = 0;
+        u_prev_from_ui[i] = 0;
+        v_prev_from_ui[i] = 0;
+        dens[i] = 0;
+        dens_prev[i] = 0;
+    }
+}
 

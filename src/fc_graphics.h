@@ -11,6 +11,10 @@
 #define SQUARE_PADDING (int)(0.3f * ((float)MIN_SCREEN_DIMENSION / (float)N))
 #define SQUARE_INDEX_I(x) (((int)x) / (SQUARE_SIZE + SQUARE_PADDING))
 #define SQUARE_INDEX_J(y) (((int)y) / (SQUARE_SIZE + SQUARE_PADDING))
+#define SQUARE_POS_X(i) i == 0 ? 0 : i*SQUARE_SIZE + i*SQUARE_PADDING
+#define SQUARE_POS_X_CENTER(i) ((SQUARE_POS_X(i)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
+#define SQUARE_POS_Y(j) j == 0 ? 0 : (j*SQUARE_SIZE + j*SQUARE_PADDING)
+#define SQUARE_POS_Y_CENTER(j) ((SQUARE_POS_Y(j)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
 #define INITIAL_ZOOM 0.5f
 #define ZOOM_INCREMENT 0.25f
 #define MAX_NUMBER_OF_UI_ELEMENTS 20
@@ -51,6 +55,8 @@ void resetCamera(void);
 // Grid
 void drawGridElement(int i, int j, Color color);
 void drawGridElementWithDens(int i, int j, float densAtPos);
+void decayGridElementTrailing(int i, int j);
+void drawGridArrow(const int i, const int j);
 
 // UI
 void beginUI(void);
@@ -61,4 +67,6 @@ void addToUI(
 void endUI(void);
 void debugGridElement(int i, int j);
 void colorSquare(const int i, const int j, COLORED_SQUARE_TYPE type);
+void resetColoredSquares(void);
+void resetUI(void);
 #endif
