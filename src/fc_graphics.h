@@ -6,15 +6,16 @@
 #include "fc_constants.h"
 #include "fc_simulation.h"
 
+// TODO: escrever essas macros como funções pqp
 #define MIN_SCREEN_DIMENSION MIN(SCREEN_WIDTH, SCREEN_HEIGHT)
 #define SQUARE_SIZE (int)(1.0f * ((float)MIN_SCREEN_DIMENSION / (float)N))
 #define SQUARE_PADDING (int)(0.3f * ((float)MIN_SCREEN_DIMENSION / (float)N))
-#define SQUARE_INDEX_I(x) (((int)x) / (SQUARE_SIZE + SQUARE_PADDING))
-#define SQUARE_INDEX_J(y) (((int)y) / (SQUARE_SIZE + SQUARE_PADDING))
-#define SQUARE_POS_X(i) i == 0 ? 0 : i*SQUARE_SIZE + i*SQUARE_PADDING
-#define SQUARE_POS_X_CENTER(i) ((SQUARE_POS_X(i)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
-#define SQUARE_POS_Y(j) j == 0 ? 0 : (j*SQUARE_SIZE + j*SQUARE_PADDING)
-#define SQUARE_POS_Y_CENTER(j) ((SQUARE_POS_Y(j)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
+#define SQUARE_INDEX_I(y) ((int)(y) / (SQUARE_SIZE + SQUARE_PADDING))
+#define SQUARE_INDEX_J(x) ((int)(x) / (SQUARE_SIZE + SQUARE_PADDING))
+#define SQUARE_POS_X(j) (j == 0 ? 0 : j*SQUARE_SIZE + j*SQUARE_PADDING)
+#define SQUARE_POS_X_CENTER(j) ((SQUARE_POS_X(j)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
+#define SQUARE_POS_Y(i) (i == 0 ? 0 : (i*SQUARE_SIZE + i*SQUARE_PADDING))
+#define SQUARE_POS_Y_CENTER(i) ((SQUARE_POS_Y(i)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
 #define INITIAL_ZOOM 0.5f
 #define ZOOM_INCREMENT 0.25f
 #define MAX_NUMBER_OF_UI_ELEMENTS 20

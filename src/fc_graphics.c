@@ -16,8 +16,8 @@ void resetCamera()
 
 void drawGridElement(int i, int j, Color color)
 {
-    float posX =  i*SQUARE_SIZE + i*SQUARE_PADDING;
-    float posY =  j*SQUARE_SIZE + j*SQUARE_PADDING;
+    float posX =  j*SQUARE_SIZE + j*SQUARE_PADDING;
+    float posY =  i*SQUARE_SIZE + i*SQUARE_PADDING;
 
     DrawRectangle(
         posX,
@@ -109,26 +109,26 @@ void decayGridElementTrailing(int i, int j)
 
 void drawGridArrow(const int i, const int j)
 {
-    float horizontalVelocity = u_prev[IX(i, j)];
-    float verticalVelocity = v_prev[IX(i, j)];
+    float horizontalVelocity = u_prev_from_ui[IX(i, j)];
+    float verticalVelocity = v_prev_from_ui[IX(i, j)];
     
     float r = 1.0f;
     
-    if(horizontalVelocity == 0 && verticalVelocity == 0)
+    if(horizontalVelocity != 0 && verticalVelocity == 0)
     {    
-        float posX =  SQUARE_POS_X_CENTER(j) - (r/2.0f);
-        float posY =  SQUARE_POS_Y_CENTER(i) - (r/2.0f);
-        // DrawCircle(posX, posY, r, RED);
+        float posX =  SQUARE_POS_X_CENTER(i) - (r/2.0f);
+        float posY =  SQUARE_POS_Y_CENTER(j) - (r/2.0f);
+        DrawCircle(posX, posY, r, RED);
         return;
     }
     
-    float amplify = 10.0f;
+    float amplify = 1.0f;
     
-    float xStart = SQUARE_POS_X_CENTER(j);
+    float xStart = SQUARE_POS_X_CENTER(i);
     // float xStart = i*SQUARE_SIZE + (SQUARE_SIZE/2) + i*SQUARE_PADDING;
     float xEnd = xStart + (horizontalVelocity*amplify);
 
-    float yStart = SQUARE_POS_Y_CENTER(i);
+    float yStart = SQUARE_POS_Y_CENTER(j);
     // float yStart = j*SQUARE_SIZE + (SQUARE_SIZE/2) + j*SQUARE_PADDING;
     float yEnd = yStart + (verticalVelocity*amplify);
     

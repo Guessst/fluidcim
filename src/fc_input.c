@@ -62,7 +62,7 @@ void collectInput(void)
             resetSimulationVars();
             for(int i = 0;i < N*N;i++)
             {
-                if(COLORED_SQUARES[i].type != CS_DEBUG_1 && COLORED_SQUARES[i].type != CS_DEBUG_2)
+                if(COLORED_SQUARES[i].type != CS_DEBUG_1)// && COLORED_SQUARES[i].type != CS_DEBUG_2)
                 {
                     COLORED_SQUARES[i].isColored = 0;
                 }
@@ -72,9 +72,11 @@ void collectInput(void)
         {
             if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
             {
-                int i = SQUARE_INDEX_I(mouseWorldPos.x);
-                int j = SQUARE_INDEX_J(mouseWorldPos.y);
+                int i = SQUARE_INDEX_I(mouseWorldPos.y);
+                int j = SQUARE_INDEX_J(mouseWorldPos.x);
+
                 u_prev_from_ui[IX(i, j)] = 10.0f;
+                colorSquare(i, j, CS_DEBUG_2);
             }
         }
         else if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
@@ -83,33 +85,17 @@ void collectInput(void)
             {
                 for(int j = 0;j < N;j++)
                 {
-                    float posX =  SQUARE_POS_X_CENTER(i);
-                    float posY =  SQUARE_POS_Y_CENTER(j);
+                    float posX = SQUARE_POS_X_CENTER(j);
+                    float posY = SQUARE_POS_Y_CENTER(i);
                     if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= SQUARE_SIZE*10)
                     {
-                        switch(CURR_SIMULATION_SUBSTANCE)
-                        {
-                            case SS_WATER:
-                                dens_prev[IX(i, j)] = WATER_DENS;
-                            break;
-                            case SS_HONEY:
-                                dens_prev[IX(i, j)] = HONEY_DENS;
-                            break;
-                            default:
-                                dens_prev[IX(i, j)] = 0;
-                                assert(0 && "unreachable");
-                            break;
-                        }
-                        // if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) == squareSize*10){
-                        // squareColored[i*N + j] = 1;
-                        // }
-                        // printf("%f %f\n", posX, posY);
+                        dens_prev[IX(i, j)] = CURR_DENS;
                     }
                     if(IsKeyDown(KEY_D)){
                         ;
                     }
-                    if((int)(mouseWorldPos.x / (SQUARE_SIZE + SQUARE_PADDING)) == i
-                    && (int)(mouseWorldPos.y / (SQUARE_SIZE + SQUARE_PADDING)) == j)
+                    if(SQUARE_INDEX_I(mouseWorldPos.y) == i
+                    && SQUARE_INDEX_J(mouseWorldPos.x) == j)
                     {
                         colorSquare(i, j, CS_TRAILING);
                     }
@@ -121,8 +107,8 @@ void collectInput(void)
     {
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
-            const int i = SQUARE_INDEX_I(mouseWorldPos.x);
-            const int j = SQUARE_INDEX_J(mouseWorldPos.y);
+            const int i = SQUARE_INDEX_I(mouseWorldPos.y);
+            const int j = SQUARE_INDEX_J(mouseWorldPos.x);
             colorSquare(i, j, CS_DEBUG_1);
             debugGridElement(i, j);
 

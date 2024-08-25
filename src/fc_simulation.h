@@ -24,7 +24,6 @@ extern float u[sizeOfBuffer];
 extern float v[sizeOfBuffer];
 extern float u_prev[sizeOfBuffer];
 extern float v_prev[sizeOfBuffer];
-extern unsigned char should_receive_uv_from_ui[sizeOfBuffer];
 extern float u_prev_from_ui[sizeOfBuffer];
 extern float v_prev_from_ui[sizeOfBuffer];
 

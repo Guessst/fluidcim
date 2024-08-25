@@ -4,7 +4,6 @@ float u[sizeOfBuffer] = {0};
 float v[sizeOfBuffer] = {0};
 float u_prev[sizeOfBuffer] = {0};
 float v_prev[sizeOfBuffer] = {0};
-unsigned char should_receive_uv_from_ui[sizeOfBuffer] = {0};
 float u_prev_from_ui[sizeOfBuffer] = {0};
 float v_prev_from_ui[sizeOfBuffer] = {0};
 
@@ -230,7 +229,6 @@ void resetSimulationVars(void)
         v[i] = 0;
         u_prev[i] = 0;
         v_prev[i] = 0;
-        should_receive_uv_from_ui[i] = 0;
         u_prev_from_ui[i] = 0;
         v_prev_from_ui[i] = 0;
         dens[i] = 0;
