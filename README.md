@@ -8,3 +8,6 @@
     <li><b>Linux</b>: executar 'build-linux.sh'</li>
     <li><b>Windows</b>: modificar 'build-windows.bat' para o caminho correto do 'vcvarsall.bat' (precisa do Visual Studio) e executar o script</li>
 </ul>
+Exemplo
+<br>
+<img style="width:300px" src="assets/showcase.gif">

@@ -17,7 +17,7 @@ int main(void)
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "fluidcim");
 
-    SetTargetFPS(0);
+    SetTargetFPS(60);
     // TODO: properly compute offset
     init();
     while (!WindowShouldClose())
