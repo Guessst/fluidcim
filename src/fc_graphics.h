@@ -13,9 +13,9 @@
 #define SQUARE_INDEX_I(y) ((int)(y) / (SQUARE_SIZE + SQUARE_PADDING))
 #define SQUARE_INDEX_J(x) ((int)(x) / (SQUARE_SIZE + SQUARE_PADDING))
 #define SQUARE_POS_X(j) (j == 0 ? 0 : j*SQUARE_SIZE + j*SQUARE_PADDING)
-#define SQUARE_POS_X_CENTER(j) ((SQUARE_POS_X(j)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
+#define SQUARE_POS_X_CENTER(j) ((SQUARE_POS_X(j)) + ((SQUARE_SIZE + SQUARE_PADDING)/2))
 #define SQUARE_POS_Y(i) (i == 0 ? 0 : (i*SQUARE_SIZE + i*SQUARE_PADDING))
-#define SQUARE_POS_Y_CENTER(i) ((SQUARE_POS_Y(i)) + (SQUARE_SIZE/2) + (SQUARE_PADDING/2))
+#define SQUARE_POS_Y_CENTER(i) ((SQUARE_POS_Y(i)) + ((SQUARE_SIZE + SQUARE_PADDING)/2))
 #define INITIAL_ZOOM 0.5f
 #define ZOOM_INCREMENT 0.25f
 #define MAX_NUMBER_OF_UI_ELEMENTS 20
@@ -57,7 +57,7 @@ void resetCamera(void);
 void drawGridElement(int i, int j, Color color);
 void drawGridElementWithDens(int i, int j, float densAtPos);
 void decayGridElementTrailing(int i, int j);
-void drawGridArrow(const int i, const int j);
+void drawGridArrow(int i, int j);
 
 // UI
 void beginUI(void);

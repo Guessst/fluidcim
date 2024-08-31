@@ -75,7 +75,8 @@ void collectInput(void)
                 int i = SQUARE_INDEX_I(mouseWorldPos.y);
                 int j = SQUARE_INDEX_J(mouseWorldPos.x);
 
-                u_prev_from_ui[IX(i, j)] = 10.0f;
+                u_prev_from_ui[IX(i, j)] = 100.0f;
+                v_prev_from_ui[IX(i, j)] = 100.0f;
                 colorSquare(i, j, CS_DEBUG_2);
             }
         }
