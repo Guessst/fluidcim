@@ -52,9 +52,6 @@ int main(void)
                     camera->offset = (Vector2){ (1 - bbox.x)*0.5f * width, (1 - bbox.y)*0.5f*height };
 
             */
-
-            // TODO: fazer vetores de velocidade
-
             BeginMode2D(CAMERA);
                 for(int i = 0;i < N;i++)
                 {

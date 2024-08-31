@@ -19,6 +19,7 @@
 #define INITIAL_ZOOM 0.5f
 #define ZOOM_INCREMENT 0.25f
 #define MAX_NUMBER_OF_UI_ELEMENTS 20
+#define ARROW_COLOR RED
 
 typedef enum {
     CS_TRAILING = 0,
@@ -71,4 +72,5 @@ void debugGridElement(int i, int j);
 void colorSquare(const int i, const int j, COLORED_SQUARE_TYPE type);
 void resetColoredSquares(void);
 void resetUI(void);
+void drawRotatedTriangle(Vector2 center, float size, float angle);
 #endif

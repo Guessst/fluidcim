@@ -121,7 +121,7 @@ void drawGridArrow(int i, int j)
         return;
         int posX = (int)(SQUARE_POS_X_CENTER(j) - (r/2.0f));
         int posY = (int)(SQUARE_POS_Y_CENTER(i) - (r/2.0f));
-        DrawCircle(posX, posY, r, RED);
+        DrawCircle(posX, posY, r, ARROW_COLOR);
     }
     
     float amplify = 1.0f;
@@ -135,15 +135,12 @@ void drawGridArrow(int i, int j)
     // float yStart = j*SQUARE_SIZE + (SQUARE_SIZE/2) + j*SQUARE_PADDING;
     int yEnd = yStart + (int)(verticalVelocity*amplify);
     
-    // DrawLine(xStart, yStart, xEnd, yEnd, RED);
-    DrawLineEx((Vector2){xStart, yStart}, (Vector2){xEnd, yEnd}, thickness, RED);
+    DrawLineEx((Vector2){xStart, yStart}, (Vector2){xEnd, yEnd}, thickness, ARROW_COLOR);
     
+    float triang_size = 10.0f;
     Vector2 lineDir = (Vector2){xEnd - xStart, yEnd - yStart};
     float angle = Vector2Angle(UP, lineDir);
-    return;
-
-    // Vector2 triang_v1 = 
-    // DrawTriangle()
+    drawRotatedTriangle((Vector2){xEnd, yEnd}, triang_size, angle);
 }
 
 void beginUI(void)
@@ -234,4 +231,25 @@ void resetColoredSquares(void)
 void resetUI(void)
 {
     NUMBER_OF_UI_ELEMENTS = 0;
+}
+
+void drawRotatedTriangle(Vector2 center, float size, float angle)
+{
+    /*
+    *
+    *   v1      /\
+    * v2  v3   /__\
+    * 
+    */
+    Vector2 v[3];
+    Vector2 vTemp;
+    Vector2 offset;
+    for(int i = 0;i < 3;i++)
+    {
+        vTemp = Vector2Rotate(UP, angle - i*120*DEG2RAD);
+        offset = (Vector2){ vTemp.x*size, vTemp.y*size };
+        v[i] = (Vector2){ center.x + offset.x, center.y + offset.y };
+    }
+    
+    DrawTriangle(v[0], v[1], v[2], ARROW_COLOR);
 }
