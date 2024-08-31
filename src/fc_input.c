@@ -86,8 +86,8 @@ void collectInput(void)
             {
                 for(int j = 0;j < N;j++)
                 {
-                    float posX = SQUARE_POS_X_CENTER(j);
-                    float posY = SQUARE_POS_Y_CENTER(i);
+                    float posX = (float)(SQUARE_POS_X_CENTER(j));
+                    float posY = (float)(SQUARE_POS_Y_CENTER(i));
                     if(Vector2Distance(mouseWorldPos, (Vector2){posX, posY}) <= SQUARE_SIZE*10)
                     {
                         dens_prev[IX(i, j)] = CURR_DENS;
