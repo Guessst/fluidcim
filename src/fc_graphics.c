@@ -16,8 +16,10 @@ void resetCamera()
 
 void drawGridElement(int i, int j, Color color)
 {
-    int posX =  j*SQUARE_SIZE + j*SQUARE_PADDING;
-    int posY =  i*SQUARE_SIZE + i*SQUARE_PADDING;
+    // int posX =  j*SQUARE_SIZE + j*SQUARE_PADDING;
+    // int posY =  i*SQUARE_SIZE + i*SQUARE_PADDING;
+    int posX = SQUARE_POS_X(j);
+    int posY = SQUARE_POS_Y(i);
 
     DrawRectangle(
         posX,
@@ -116,29 +118,32 @@ void drawGridArrow(int i, int j)
     
     if(horizontalVelocity == 0 && verticalVelocity == 0)
     {    
-        int posX = (int)(SQUARE_POS_X_CENTER(i) - (r/2.0f));
-        int posY = (int)(SQUARE_POS_Y_CENTER(j) - (r/2.0f));
-        DrawCircle(posX, posY, r, RED);
         return;
-        // float posX = SQUARE_POS_X_CENTER(j) - (r/2.0f);
-        // float posY = SQUARE_POS_Y_CENTER(i) - (r/2.0f);
-        // DrawCircle(posX, posY, r, RED);
-        // return;
+        int posX = (int)(SQUARE_POS_X_CENTER(j) - (r/2.0f));
+        int posY = (int)(SQUARE_POS_Y_CENTER(i) - (r/2.0f));
+        DrawCircle(posX, posY, r, RED);
     }
     
     float amplify = 1.0f;
     float thickness = 1.5f;
     
-    int xStart = (int)(SQUARE_POS_X_CENTER(i));
+    int xStart = (int)(SQUARE_POS_X_CENTER(j));
     // float xStart = i*SQUARE_SIZE + (SQUARE_SIZE/2) + i*SQUARE_PADDING;
     int xEnd = xStart + (int)(horizontalVelocity*amplify);
 
-    int yStart = (int)(SQUARE_POS_Y_CENTER(j));
+    int yStart = (int)(SQUARE_POS_Y_CENTER(i));
     // float yStart = j*SQUARE_SIZE + (SQUARE_SIZE/2) + j*SQUARE_PADDING;
     int yEnd = yStart + (int)(verticalVelocity*amplify);
     
     // DrawLine(xStart, yStart, xEnd, yEnd, RED);
     DrawLineEx((Vector2){xStart, yStart}, (Vector2){xEnd, yEnd}, thickness, RED);
+    
+    Vector2 lineDir = (Vector2){xEnd - xStart, yEnd - yStart};
+    float angle = Vector2Angle(UP, lineDir);
+    return;
+
+    // Vector2 triang_v1 = 
+    // DrawTriangle()
 }
 
 void beginUI(void)

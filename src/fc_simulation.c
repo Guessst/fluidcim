@@ -229,8 +229,8 @@ void resetSimulationVars(void)
         v[i] = 0;
         u_prev[i] = 0;
         v_prev[i] = 0;
-        u_prev_from_ui[i] = 0;
-        v_prev_from_ui[i] = 0;
+        // u_prev_from_ui[i] = 0;
+        // v_prev_from_ui[i] = 0;
         dens[i] = 0;
         dens_prev[i] = 0;
     }

@@ -5,6 +5,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
 #define MIN(X, Y) X > Y ? Y : X
+#define UP (Vector2){0, 1}
 
 typedef enum {
     VT_INT,

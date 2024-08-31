@@ -29,6 +29,7 @@ int main(void)
             for(int i = 0;i < sizeOfBuffer;i++)
             {
                 u_prev[i] = u_prev_from_ui[i];
+                v_prev[i] = v_prev_from_ui[i];
             }
             
             vel_step(u, v, u_prev, v_prev, GetFrameTime());
