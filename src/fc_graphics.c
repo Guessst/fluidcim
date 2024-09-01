@@ -124,7 +124,7 @@ void drawGridArrow(int i, int j)
         DrawCircle(posX, posY, r, ARROW_COLOR);
     }
     
-    float amplify = 1.0f;
+    float amplify = 0.5f;
     float thickness = 1.5f;
     
     int xStart = (int)(SQUARE_POS_X_CENTER(j));
@@ -135,9 +135,11 @@ void drawGridArrow(int i, int j)
     // float yStart = j*SQUARE_SIZE + (SQUARE_SIZE/2) + j*SQUARE_PADDING;
     int yEnd = yStart + (int)(verticalVelocity*amplify);
     
+    DrawCircle(xStart, yStart, r, BLUE);
+
     DrawLineEx((Vector2){xStart, yStart}, (Vector2){xEnd, yEnd}, thickness, ARROW_COLOR);
     
-    float triang_size = 10.0f;
+    float triang_size = 2.0f;
     Vector2 lineDir = (Vector2){xEnd - xStart, yEnd - yStart};
     float angle = Vector2Angle(UP, lineDir);
     drawRotatedTriangle((Vector2){xEnd, yEnd}, triang_size, angle);

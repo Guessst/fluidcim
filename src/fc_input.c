@@ -1,4 +1,5 @@
 #include "fc_input.h"
+#include "fc_velocity_presets.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -67,6 +68,11 @@ void collectInput(void)
                     COLORED_SQUARES[i].isColored = 0;
                 }
             }
+        }
+        if(IsKeyPressed(KEY_ONE))
+        {
+            setPreset1(5);
+            printf("set preset 1\n");
         }
         if(IsKeyDown(KEY_LEFT_SHIFT))
         {
