@@ -17,6 +17,7 @@ void setPreset1(int radiusInGridElements)
             Vector2 currElement = (Vector2){ j, i };
             if(Vector2Distance(gridCenter, currElement) <= radiusInGridElements)
             {
+                // TODO: seila tenho que pensar melhor em como apontar as setas pro centro ja que estão passando do centro
                 COLORED_SQUARES[i*N + j] = (ColoredSquare){ 1, CS_DEBUG_2, 255 };
                 Vector2 dirToCenter = (Vector2){ gridCenter.x - currElement.x, gridCenter.y - currElement.y };
                 u_prev_from_ui[IX(i, j)] = dirToCenter.x * amplifyVel;
