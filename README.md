@@ -1,7 +1,7 @@
 # fluidcim
 <img align="left" style="width:200px" src="assets/logo.png">
 <p>
-    Uma implementação de simulação de flúidos em C usando a biblioteca Raylib, baseada no artigo "Real-Time Fluid Dynamics for Games", Stam, Jos. (2003). Disponível em <a href="https://www.researchgate.net/publication/2560062_Real-Time_Fluid_Dynamics_for_Games">ResearchGate</a>.
+    Uma implementação de simulação de fluidos em C usando a biblioteca Raylib, baseada no artigo "Real-Time Fluid Dynamics for Games", Stam, Jos. (2003). Disponível em <a href="https://www.researchgate.net/publication/2560062_Real-Time_Fluid_Dynamics_for_Games">ResearchGate</a>.
 </p>
 <p>
 <b>Instruções para buildar</b>
